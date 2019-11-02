@@ -1,6 +1,7 @@
 package com.example.advanced_android.views
 
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -8,6 +9,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
@@ -31,6 +33,8 @@ private const val ID_PARAM = "gameId"
  */
 class GameDetailsFragment : Fragment() {
     private var gameId : Int? = null
+    private var listener: VisitWebsite? = null
+    private var link: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,13 +48,18 @@ class GameDetailsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_game_details, container, false)
+        val view = inflater.inflate(R.layout.fragment_game_details, container, false)
+        view.findViewById<Button>(R.id.button).setOnClickListener{ listener?.VisitWebsite(link!!)}
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         activity?.let {
             fetchData(it)
+        }
+        button.setOnClickListener {
+            listener?.VisitWebsite(link!!)
         }
     }
 
@@ -64,6 +73,8 @@ class GameDetailsFragment : Fragment() {
                 title.text = response.getString("name")
                 description.text = response.getString("description")
                 Picasso.get().load(response.getString("img")).into(imageView)
+                link = response.getString("link")
+
             },
             Response.ErrorListener { error ->
                 Log.e("test", error.localizedMessage)
@@ -72,6 +83,12 @@ class GameDetailsFragment : Fragment() {
 
         queue.add(request)
     }
+
+
+    interface VisitWebsite {
+        fun VisitWebsite(link : String)
+    }
+
 
 
     companion object {
