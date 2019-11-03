@@ -27,8 +27,8 @@ class MainActivity : AppCompatActivity(), GamesListFragment.ViewDetails, GameDet
         transaction.commit()
     }
 
-    override fun VisitWebsite(link: String) {
-        val openURL = Intent(Intent.ACTION_VIEW)
+    override fun visitWebsite(link: String) {
+        val openURL = Intent(android.content.Intent.ACTION_VIEW)
         openURL.data = Uri.parse(link)
         startActivity(openURL)
     }

@@ -33,7 +33,7 @@ private const val ID_PARAM = "gameId"
  */
 class GameDetailsFragment : Fragment() {
     private var gameId : Int? = null
-    private var listener: VisitWebsite? = null
+    private var url: VisitWebsite? = null
     private var link: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,7 +49,6 @@ class GameDetailsFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_game_details, container, false)
-        view.findViewById<Button>(R.id.button).setOnClickListener{ listener?.VisitWebsite(link!!)}
         return view
     }
 
@@ -59,7 +58,9 @@ class GameDetailsFragment : Fragment() {
             fetchData(it)
         }
         button.setOnClickListener {
-            listener?.VisitWebsite(link!!)
+            val openURL = Intent(android.content.Intent.ACTION_VIEW)
+            openURL.data = Uri.parse(link)
+            startActivity(openURL)
         }
     }
 
@@ -86,7 +87,7 @@ class GameDetailsFragment : Fragment() {
 
 
     interface VisitWebsite {
-        fun VisitWebsite(link : String)
+        fun visitWebsite(link : String)
     }
 
 
